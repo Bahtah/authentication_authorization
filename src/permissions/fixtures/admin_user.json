@@ -1,0 +1,16 @@
+[
+  {
+    "model": "users.user",
+    "pk": "123e4567-e89b-12d3-a456-426614174000",
+    "fields": {
+      "first_name": "Admin",
+      "last_name": "Root",
+      "middle_name": "",
+      "email": "admin@example.com",
+      "password": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",
+      "is_active": true,
+      "created_at": "2025-11-26T12:00:00Z",
+      "updated_at": "2025-11-26T12:00:00Z"
+    }
+  }
+]
