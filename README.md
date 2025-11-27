@@ -1,4 +1,4 @@
-Backend Authentication & Authorization System
+# Backend Authentication & Authorization System
 
 Это небольшое backend-приложение на Django + DRF, реализующее собственную систему аутентификации и авторизации. Основной целью проекта было продумать и реализовать механизм доступа к ресурсам без использования готовых возможностей Django для аутентификации и ролей.
 

@@ -3,7 +3,8 @@ from functools import wraps
 from rest_framework import status
 from rest_framework.response import Response
 
-from permissions.models import UserRole
+from permissions.models import UserRole, Permission
+
 
 def admin_only(view_func):
     @wraps(view_func)
@@ -47,3 +48,18 @@ def read_only(view_func):
             )
         return view_func(self, request, *args, **kwargs)
     return wrapper
+
+def manager(view_func):
+    def wrapper(self, request, *args, **kwargs):
+        user = request.user
+        has_perm = Permission.objects.filter(
+            rolepermission__role__userrole__user=user,
+            codename="add and delete"
+        ).exists()
+
+        if not has_perm:
+            return Response({"detail": "Forbidden"}, status=status.HTTP_403_FORBIDDEN)
+
+        return view_func(self, request, *args, **kwargs)
+    return wrapper
+

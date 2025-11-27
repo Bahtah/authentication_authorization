@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from permissions.permissions import admin_only, read_only, admin_or_read_only
+from permissions.permissions import admin_only, read_only, admin_or_read_only, manager
 from users.utils import token_required
 
 REPORTS = [
@@ -30,7 +30,7 @@ class ReportAdminOrReadOnlyAPIView(APIView):
         return Response(REPORTS, status=status.HTTP_200_OK)
 
     @token_required
-    @admin_or_read_only
+    @manager
     def post(self, request):
         new_report = request.data.get("report")
         if not new_report:
@@ -40,7 +40,7 @@ class ReportAdminOrReadOnlyAPIView(APIView):
         return Response({"message": "Report created", "data": new_report}, status=201)
 
     @token_required
-    @admin_or_read_only
+    @manager
     def delete(self, request):
         report_index = request.data.get("index")
         if report_index is None or report_index >= len(REPORTS):
