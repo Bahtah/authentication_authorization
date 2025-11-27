@@ -4,18 +4,18 @@ from rest_framework import status
 
 from users.utils import token_required
 from .models import Role, Permission, RolePermission, UserRole
+from .permissions import admin_only
 from .serializers import (
     RoleSerializer,
     PermissionSerializer,
     RolePermissionSerializer,
     UserRoleSerializer,
 )
-from .utils import admin_required
 
 
 class RoleAdminAPIView(APIView):
     @token_required
-    @admin_required
+    @admin_only
     def post(self, request):
         serializer = RoleSerializer(data=request.data)
         if serializer.is_valid():
@@ -33,7 +33,7 @@ class RoleAdminAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @token_required
-    @admin_required
+    @admin_only
     def get(self, request):
         qs = Role.objects.all()
         serializer = RoleSerializer(qs, many=True)
@@ -42,7 +42,7 @@ class RoleAdminAPIView(APIView):
 
 class PermissionAdminAPIView(APIView):
     @token_required
-    @admin_required
+    @admin_only
     def post(self, request):
         serializer = PermissionSerializer(data=request.data)
         if serializer.is_valid():
@@ -51,7 +51,7 @@ class PermissionAdminAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @token_required
-    @admin_required
+    @admin_only
     def get(self, request):
         qs = Permission.objects.all()
         serializer = PermissionSerializer(qs, many=True)
@@ -60,7 +60,7 @@ class PermissionAdminAPIView(APIView):
 
 class RolePermissionAdminAPIView(APIView):
     @token_required
-    @admin_required
+    @admin_only
     def post(self, request):
         serializer = RolePermissionSerializer(data=request.data)
 
@@ -80,7 +80,7 @@ class RolePermissionAdminAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @token_required
-    @admin_required
+    @admin_only
     def get(self, request):
         qs = RolePermission.objects.select_related("role", "permission").all()
         serializer = RolePermissionSerializer(qs, many=True)
@@ -89,7 +89,7 @@ class RolePermissionAdminAPIView(APIView):
 
 class UserRoleAdminAPIView(APIView):
     @token_required
-    @admin_required
+    @admin_only
     def post(self, request):
         serializer = UserRoleSerializer(data=request.data)
         if serializer.is_valid():
@@ -112,7 +112,7 @@ class UserRoleAdminAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @token_required
-    @admin_required
+    @admin_only
     def delete(self, request):
         user_id = request.data.get("user")
         role_id = request.data.get("role")
@@ -129,7 +129,7 @@ class UserRoleAdminAPIView(APIView):
         return Response({"deleted": count}, status=status.HTTP_204_NO_CONTENT)
 
     @token_required
-    @admin_required
+    @admin_only
     def get(self, request):
         qs = UserRole.objects.select_related("user", "role").all()
         data = [
